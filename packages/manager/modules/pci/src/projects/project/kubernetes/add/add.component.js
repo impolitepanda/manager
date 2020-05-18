@@ -8,6 +8,7 @@ export default {
     projectId: '<',
     regions: '<',
     versions: '<',
+    quotas: '<',
   },
   controller,
   template,

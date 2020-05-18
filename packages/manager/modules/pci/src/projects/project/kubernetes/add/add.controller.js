@@ -1,10 +1,14 @@
+import find from 'lodash/find';
 import get from 'lodash/get';
-import { READY_STATUS } from './add.constants';
+
+import Datacenter from '../../../../components/project/regions-list/datacenter.class';
+import { READY_STATUS, DEFAULT_NODE_COUNT } from './add.constants';
 
 export default class {
   /* @ngInject */
-  constructor($translate, CucCloudMessage, OvhApiCloudProjectKube, Poller) {
+  constructor($translate, $q, CucCloudMessage, OvhApiCloudProjectKube, Poller) {
     this.$translate = $translate;
+    this.$q = $q;
     this.CucCloudMessage = CucCloudMessage;
     this.OvhApiCloudProjectKube = OvhApiCloudProjectKube;
     this.Poller = Poller;
@@ -12,11 +16,15 @@ export default class {
 
   $onInit() {
     this.isAdding = false;
-
     this.cluster = {
       region: null,
       version: null,
       name: null,
+      nodePool: {
+        flavor: null,
+        nodeCount: DEFAULT_NODE_COUNT,
+        monthlyBilling: false,
+      },
     };
 
     this.loadMessages();
@@ -75,5 +83,21 @@ export default class {
         },
       },
     );
+  }
+
+  onRegionSubmit() {
+    const datacenter = new Datacenter({
+      name: this.cluster.region.name,
+      quota: find(this.quotas, { region: this.cluster.region.name }),
+    });
+    this.cluster.region = datacenter;
+  }
+
+  onNodePoolFocus() {
+    this.displaySelectedFlavor = false;
+  }
+
+  onNodePoolSubmit() {
+    this.displaySelectedFlavor = true;
   }
 }

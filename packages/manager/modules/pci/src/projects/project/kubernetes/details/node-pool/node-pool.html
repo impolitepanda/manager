@@ -1,0 +1,87 @@
+<div data-ui-view>
+    <cui-message-container
+        data-messages="$ctrl.messages"
+    ></cui-message-container>
+    <oui-datagrid data-rows="$ctrl.nodePools">
+        <oui-column
+            data-title=":: 'kube_node_pool_name' | translate"
+            data-property="name"
+            data-type="string"
+            data-searchable
+            data-filterable
+            data-sortable
+        >
+            <a
+                class="oui-link"
+                data-ng-if="$row.isReady()"
+                data-ui-sref="{{ $ctrl.getNodesState($row.id, $row) }}"
+                data-ng-bind="$row.name"
+            >
+            </a>
+            <span data-ng-if="!$row.isReady()"
+                data-ng-bind="$row.name"></span>
+        </oui-column>
+        <oui-column
+            data-title=":: 'kube_node_pool_creation_date' | translate"
+            data-property="createdAt"
+            data-type="date"
+            data-filterable
+            data-sortable
+        >
+            <span data-ng-bind="$row.createdAt| date:'medium'"></span>
+        </oui-column>
+        <oui-column
+            data-title=":: 'kube_node_pool_node_count' | translate"
+            data-property="availableNodes"
+            data-type="integer"
+            data-searchable
+            data-filterable
+            data-sortable
+        >
+        </oui-column>
+        <oui-column
+            data-title=":: 'kube_service_cluster_status' | translate"
+            data-property="status"
+        >
+            <span
+                class="oui-status"
+                data-ng-class="{
+                    'oui-status_success' : $row.isReady(),
+                    'oui-status_warning' : $row.isProcessing(),
+                    'oui-status_error' : $row.isError()
+                    }"
+                data-translate="{{:: 'kube_nodes_status_' + $row.status }}"
+            >
+            </span>
+        </oui-column>
+        <oui-action-menu
+            data-disabled="!$row.isReady()"
+            data-align="end"
+            data-compact
+        >
+            <oui-action-menu-item
+                data-text="{{:: 'kube_node_pool_edit' | translate }}"
+                data-ui-sref="{{ $ctrl.getNodesState($row.id, $row) }}"
+            ></oui-action-menu-item>
+            <oui-action-menu-item
+                data-text="{{:: 'kube_node_pool_delete' | translate }}"
+                data-on-click="$ctrl.deleteNodePool($row.id, $row.name)"
+            ></oui-action-menu-item>
+        </oui-action-menu>
+        <extra-top>
+            <oui-button
+                data-aria-label="{{:: 'kube_node_pool_add' | translate }}"
+                data-text="{{:: 'kube_node_pool_add' | translate }}"
+                data-on-click="$ctrl.addNodePool()"
+            >
+            </oui-button>
+            <button
+                class="pl-2 oui-button oui-button_secondary oui-button_icon-only oui-button_small-width"
+                data-title="{{:: 'kube_node_pool_refreh' | translate }}"
+                data-ng-click="$ctrl.refreshNodePools()"
+            >
+                <span class="fa fa-refresh" aria-hidden="true"></span>
+            </button>
+        </extra-top>
+    </oui-datagrid>
+</div>

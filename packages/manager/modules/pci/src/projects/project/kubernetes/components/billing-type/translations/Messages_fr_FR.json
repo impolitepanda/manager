@@ -1,0 +1,4 @@
+{
+  "kubernetes_add_billing_type_payment_method": "Vous serez facturé sur votre mode de paiement par défaut",
+  "kubernetes_add_billing_type_description": "Vous pourrez passer de la facturation horaire au forfait mensuel en éditant le pool de nœud, après déploiement de votre cluster."
+}

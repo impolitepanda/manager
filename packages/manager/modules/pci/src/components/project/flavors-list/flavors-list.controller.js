@@ -3,26 +3,34 @@ import find from 'lodash/find';
 import first from 'lodash/first';
 import get from 'lodash/get';
 import forEach from 'lodash/forEach';
+import isEmpty from 'lodash/isEmpty';
 
 export default class FlavorsListController {
   /* @ngInject */
-  constructor(PciProjectFlavors) {
+  constructor($q, PciProjectFlavors) {
+    this.$q = $q;
     this.PciProjectFlavors = PciProjectFlavors;
   }
 
   $onInit() {
     this.isLoading = true;
-
+    this.flavorCount = this.flavorCount || 1;
     return this.getFlavors().finally(() => {
       this.isLoading = false;
     });
   }
 
   getFlavors() {
-    return this.PciProjectFlavors.getFlavors(
-      this.serviceName,
-      get(this.region, 'name'),
-    ).then((flavors) => {
+    let flavorsPromise = null;
+    if(!isEmpty(this.flavors)) {
+      flavorsPromise = this.$q.when(this.flavors);
+    } else {
+      flavorsPromise = this.PciProjectFlavors.getFlavors(
+        this.serviceName,
+        get(this.region, 'name'),
+      );
+    }
+    flavorsPromise.then((flavors) => {
       const flavorGroups = this.PciProjectFlavors.constructor.mapByFlavorType(
         filter(
           flavors,
@@ -43,6 +51,7 @@ export default class FlavorsListController {
 
       return flavors;
     });
+    return flavorsPromise;
   }
 
   findFlavor() {

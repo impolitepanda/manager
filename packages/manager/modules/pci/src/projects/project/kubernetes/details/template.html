@@ -12,9 +12,9 @@
             >
             </oui-header-tabs-item>
             <oui-header-tabs-item
-                data-text="{{:: 'kube_nodes' | translate }}"
-                data-href="{{:: $ctrl.nodesLink }}"
-                data-active="$ctrl.currentActiveLink() === $ctrl.nodesLink"
+                data-text="{{:: 'kube_node_pools' | translate }}"
+                data-href="{{:: $ctrl.nodePoolsLink }}"
+                data-active="$ctrl.currentActiveLink().startsWith($ctrl.nodePoolsLink)"
             >
             </oui-header-tabs-item>
             <oui-header-tabs-item
