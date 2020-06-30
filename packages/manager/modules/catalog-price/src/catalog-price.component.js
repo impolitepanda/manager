@@ -9,6 +9,8 @@ const component = {
     price: '<',
     tax: '<',
     user: '<',
+    performRounding: '<?',
+    minimumFractionDigits: '<?',
   },
   controller,
   template,
